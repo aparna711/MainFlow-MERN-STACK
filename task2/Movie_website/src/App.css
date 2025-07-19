@@ -10,10 +10,11 @@
     body {
     font-family: "DM Sans", serif;
     font-optical-sizing: auto;
-    background: #030014;
+    background: #030014; 
+     
   }
    main {
-    @apply min-h-screen relative flex items-center justify-center items-start;
+    @apply min-h-auto relative flex items-center justify-center items-start;
   }
      h1 {
     @apply mx-auto max-w-4xl text-center text-6xl font-bold text-white;
@@ -21,22 +22,75 @@
   header {
     @apply sm:mt-10 mt-5;
   }
-  img{
-    @apply rounded-lg shadow-lg;
-  }
+  
   
 }
 @layer components{
    
-    .wrapper {
+  .hero {
+    @apply w-60 h-50 object-cover mr-3 opacity-60 animate-pulse;
+  }
+
+  .wrapper {
         @apply w-full  rounded-lg  px-4 sm:px-6 lg:px-8 bg-[url('./assets/background.png')];
     }
-    
+   
+   .all-movies{
+      @apply grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4;
+   }
+   /* bg-[#0a042d] */
+    .all-movies .movie-card {
+      @apply m-1 p-5 rounded-xl outline-2 outline-gray-500 shadow-inner drop-shadow-indigo-500;
+
+      @apply transition-all duration-300 ease-in-out;
+
+      @apply hover:bg-stone-800 hover:scale-105 hover:brightness-125 hover:opacity-100 hover:shadow-lg;
+  }
+
+    /* .all-movies .movie-card:hover {
+      @apply bg-stone-800 scale-105 transition-shadow duration-300 ease-in-out brightness-125 opacity-100;
+    } */
+    .movie-card img {
+      @apply rounded-lg w-60 h-67 object-cover shadow-lg mb-3;
+    }
+    .movie-card h3 {
+      @apply text-white font-bold text-base line-clamp-1;
+    }
+    .movie-card .content {
+      @apply mt-2 flex flex-row items-center flex-wrap gap-2;
+    }
+    .movie-card .rating {
+      @apply flex flex-row items-center gap-1;
+    }
+    .movie-card .rating img {
+      @apply size-4 object-contain;
+    }
+    .movie-card .rating p {
+      @apply font-bold text-base text-white;
+    }
+    .movie-card .content span {
+      @apply text-sm text-gray-100;
+    }
+    .movie-card .content .lang {
+      @apply capitalize text-gray-100 font-medium text-base;
+    }
+    .movie-card .content .year {
+      @apply text-gray-100 font-medium text-base;
+    }
+
+
+  
 }
 
 
 @layer utilities{
     .text-gradient {
         @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500  to-red-100;
+    }
+    .background-gradient{
+        @apply bg-gradient-to-r from-purple-400 via-pink-500 to-red-100;
+    }
+    .text-gradient-secondary {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-red-100;
     }
 }
