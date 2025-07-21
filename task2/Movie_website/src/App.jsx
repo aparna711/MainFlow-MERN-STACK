@@ -1,9 +1,13 @@
 
-import { useState, useEffect } from 'react'
-import Header from './components/Header'
+import { useState, useEffect, use } from 'react'
+import {useDebounce} from 'react-use';
+// import Header from './components/Header'
+import Search from './components/Search.jsx'
 import './App.css'
-import Spinner from './components/Spinner';
-import MovieCard from './components/MovieCard';
+import Spinner from './components/Spinner.jsx';
+import MovieCard from './components/MovieCard.jsx';
+import { updateSearchCount, getTrendingMovies } from './Appwrite.js';
+
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 
@@ -20,20 +24,21 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [movieList, setMovieList] = useState([]);
   const [isloading, setIsLoading] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+  const [trendingMovies, setTrendingMovies] = useState([]);
 
-  const fetchMovies = async () => {
+  
+  const fetchMovies = async (query='') => {
     setIsLoading(true);
     setErrorMessage(''); // Clear any previous error messages
     try{
-      const endpoint = `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+      const endpoint = query? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}` 
+                            : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
       const response = await fetch(endpoint, API_OPTIONS);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      //  alert(response)
-      //throw new Error(`HTTP error! status: ${response.status}`);
-      
-      
+    
       const data = await response.json();
       console.log(data);
       if(data.Response === 'False'){
@@ -41,10 +46,17 @@ function App() {
         setMovieList([]);
         return;
       }
-      // Process the data as needed, e.g., set it to state or display it
+      
       setErrorMessage(''); // Clear any previous error messages
       setMovieList(data.results || []);
-    }
+      
+      // If a search term is provided, update the search count in Appwrite
+         if (query && data.results.length > 0) {
+           await updateSearchCount(query.trim(), data.results[0]);
+        }
+
+      }
+      
     catch(error){
       console.error('Error fetching movies:', error);
       setErrorMessage('Failed to fetch movies. Please try again later.');
@@ -54,17 +66,49 @@ function App() {
       setIsLoading(false);
     }
   }
-  
-  
-  useEffect(() => {
-    fetchMovies()
-  }, []);
 
+
+
+  // Debounce the search term to avoid too many API calls
+  // useDebounce is a custom hook that delays the execution of the function until after a specified delay
+  // This helps to reduce the number of API calls made while the user is typing
+  useDebounce(() => { setDebouncedSearchTerm(searchTerm) }, 900, [searchTerm]);
+  
+   const loadTrendingMovies = async() =>{
+      try{
+        const movies = await getTrendingMovies();
+        setTrendingMovies(movies);
+      }
+      catch(error){
+        console.error(`Error fetching trending movies : ${error}`)
+      }
+  }
+  useEffect(() => {
+    fetchMovies(debouncedSearchTerm)
+  }, [debouncedSearchTerm]);
+
+   useEffect(() => {
+    loadTrendingMovies();
+  },[trendingMovies]);
 
   return (
     
       <>
-      <Header />
+       <main>
+       <div className="wrapper">
+       <header className="flex flex-col justify-center items-center">
+       
+        {/* <img src="https://i.ibb.co/6n1x5f3/logo.png" alt="logo" /> */}
+        <img src="https://img.freepik.com/free-photo/view-3d-cinema-elements_23-2150720822.jpg" alt="hero" 
+        className="hero"/>
+       
+        <h1 className=" text-gradient m-4">
+           Welcome to Movie World
+        </h1>
+       </header>
+       <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+       </div>
+      </main>
        
       <section className="text-white">
        {/* <h2 className='m-3 text-xl'>All Movies</h2> */}
@@ -73,9 +117,23 @@ function App() {
         </h3>
        
         {/* {errorMessage &&  <p className="text-red-500">{errorMessage}</p> } */}
-    
-     
-      
+   
+     {trendingMovies.length > 0 && (
+      <div>
+         <h2 className='text-gradient-secondary  m-4 text-2xl text-center font-bold'>. . .    Trending Movies  . . .</h2>
+         <section className="trending ">
+        <ul>
+          {trendingMovies.map((movie, index) => (
+            <li key={movie.$id}>
+              <p>{index+1 }</p>
+              <img src={movie.poster_url} alt={movie.title}/>
+            </li>
+          ))}
+        </ul>
+      </section>
+      </div>   
+     )}
+   
       { isloading ? (
         <Spinner />
       ) : errorMessage ? (
@@ -86,16 +144,9 @@ function App() {
              <MovieCard key={movie.id} movie = {movie} />
           ))}
         </ul>
-      )
-
-      }
-            
-    
+      )}
   </section>
-          
-
 </>
-     
   )
 }
 
