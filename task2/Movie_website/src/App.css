@@ -1,0 +1,123 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+
+
+
+
+@import "tailwindcss";
+
+@layer base{
+    body {
+    font-family: "DM Sans", serif;
+    font-optical-sizing: auto;
+    background: #030014; 
+     
+  }
+   main {
+    @apply min-h-auto relative flex items-center justify-center items-start;
+  }
+     h1 {
+    @apply mx-auto max-w-4xl text-center text-6xl font-bold text-white;
+  }
+  header {
+    @apply sm:mt-10 mt-5;
+  }
+  
+  
+}
+@layer components{
+   
+  .hero {
+    @apply w-60 h-50 object-cover mr-3 opacity-60 animate-pulse;
+  }
+
+  .wrapper {
+        @apply w-full  rounded-lg  px-4 sm:px-6 lg:px-8 bg-[url('./assets/background.png')];
+    }
+   
+   .all-movies{
+      @apply grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4;
+   }
+   /* bg-[#0a042d] */
+    .all-movies .movie-card {
+      @apply m-1 p-5 rounded-xl outline-2 outline-gray-500 shadow-inner drop-shadow-indigo-500;
+
+      @apply transition-all duration-300 ease-in-out;
+
+      @apply hover:bg-stone-800 hover:scale-105 hover:brightness-125 hover:opacity-100 hover:shadow-lg;
+  }
+
+    .movie-card img {
+      @apply rounded-lg w-60 h-67 object-cover shadow-lg mb-3 ;
+    }
+    .movie-card h3 {
+      @apply text-white font-bold text-base line-clamp-1;
+    }
+    .movie-card .content {
+      @apply mt-2 flex flex-row items-center flex-wrap gap-2;
+    }
+    .movie-card .rating {
+      @apply flex flex-row items-center gap-1;
+    }
+    .movie-card .rating img {
+      @apply w-8 h-8 invert opacity-80 text-white text-yellow-900 fill-current;
+    }
+    .movie-card .rating p {
+      @apply font-bold text-base text-white;
+    }
+    .movie-card .content span {
+      @apply text-sm text-gray-100;
+    }
+    .movie-card .content .lang {
+      @apply capitalize text-gray-100 font-medium text-base;
+    }
+    .movie-card .content .year {
+      @apply text-gray-100 font-medium text-base;
+    }
+
+    .trending {
+    @apply my-20 mx-10 h-[250px];
+    }
+
+    /* .trending  ul {
+      @apply flex flex-row overflow-y-auto gap-5 -mt-10 w-full ;
+    }
+
+    .trending li {
+      @apply min-w-[230px] flex flex-row items-center;
+    } */
+
+    /* .trending ul li p {
+      @apply  mt-[22px] text-nowrap text-white;
+    } */
+      .trending  ul{
+        @apply flex flex-row overflow-y-auto -mt-10  w-full ;
+
+      }
+      .trending  li {
+      @apply min-w-[230px] flex flex-row items-center gap-2;
+    }
+      .trending ul li p {
+      @apply  ml-15 mr-5 mt-[22px] text-nowrap text-white text-8xl;
+    } 
+       /* .trending ul li p{
+         @apply mt-[22px] text-white text-xl font-bold;
+       } */
+    .trending ul li img {
+      @apply w-[150px] h-[200px] rounded-lg object-cover -ml-3.5;
+      @apply transition-all duration-300 ease-in-out;
+      @apply hover:bg-stone-800 hover:scale-105 hover:brightness-125 hover:opacity-100 hover:shadow-lg
+    }
+  
+}
+
+
+@layer utilities{
+    .text-gradient {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500  to-red-100;
+    }
+    
+    .text-gradient-secondary {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-red-100;
+    }
+}
