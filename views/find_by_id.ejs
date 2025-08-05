@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch By Id</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script>
+        const fetchData = () => {
+            const userId = document.getElementById('userId').value.trim();
+            if (!userId) {
+                alert('Please enter a User ID');
+                return;
+            }
+            fetch(`/user/find/${userId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('User not found');
+                        // console.error('Error fetching user:', response.statusText);
+                        // console.log(response);
+                    }
+                    return response.json();
+                })
+                .then( data => {
+                    console.log('Data:\n',data);
+                    document.getElementById('userDetails').innerHTML = `
+                        <div class="container mt-5">
+                            <div class="card shadow-lg">
+                                <div class="card-header bg-primary text-white">
+                                    <h2 class="mb-0">User Details</h2>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Username:</strong> ${data.user.username}  %></p>
+                                    <p><strong>Email:</strong>  ${data.user.email}</p>
+                                    <p><strong>Age:</strong>  ${data.user.age} %></p>
+                                    <p><strong>Role:</strong>  ${data.user.role} %></p>
+                                </div>
+                            </div>
+                        </div>  
+                    `;
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        };
+    </script>
+</head>
+<body>
+   
+<%- include('include/navbar') %>     
+<div class="container d-flex justify-content-center align-items-start" style="min-height:60vh;">
+  <div class="card shadow-sm w-100" style="max-width:720px;">
+    <div class="card-body">
+      <h4 class="card-title mb-3">Fetch User By ID</h4>
+
+      <div class="mb-3">
+        <label for="userId" class="form-label">User ID</label>
+        <input type="text" id="userId" class="form-control" placeholder="Paste MongoDB ObjectId or user id">
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-primary" onclick="fetchData()">Fetch User</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('userId').value=''">Clear</button>
+      </div>
+<%- include('include/footer') %>   
+      <div id="userDetails" class="mt-4"></div>
+    
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

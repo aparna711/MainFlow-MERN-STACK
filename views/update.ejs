@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update</title>
+</head>
+<body>
+    //name, email, age, role
+<form action="/edit/<%= user._id %>?_method=PATCH" method="POST">
+  <div class="mb-3">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" class="form-control" value="<%= user.username %>" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" class="form-control" value="<%= user.email %>" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="age">Age</label>
+    <input type="number" name="age" id="age" class="form-control" value="<%= user.age %>" required>
+  </div>
+
+  <div class="mb-3">
+    <label>Role</label><br>
+    <input type="radio" name="role" value="Admin" id="admin" <%= user.role === 'Admin' ? 'checked' : '' %> >
+    <label for="admin">Admin</label>
+
+    <input type="radio" name="role" value="User" id="user" <%= user.role === 'User' ? 'checked' : '' %> >
+    <label for="user">User</label>
+
+    <input type="radio" name="role" value="Editor" id="editor" <%= user.role === 'Editor' ? 'checked' : '' %> >
+    <label for="guest">Editor</label>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Update User</button>
+</form>
+
+</body>
+</html>
