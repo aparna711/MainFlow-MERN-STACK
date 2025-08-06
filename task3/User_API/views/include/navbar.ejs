@@ -25,20 +25,32 @@
           <li><a class="dropdown-item" href="/user/find">Fetch user by ID</a></li>
           <li><a class="dropdown-item" href="/user/age-above-25">Based on age > 25</a></li>
           <li><a class="dropdown-item" href="/user/role-admin">Based on Role = "Admin"</a></li>
-          <li><a class="dropdown-item" href="/user/name-or-email">Fetch only name or email</a></li>
+          <li><a class="dropdown-item" href="/users/name-and-email">Fetch only name and email of Users</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="/users/sort">Sort age by DESC</a></li>
+          <li><a class="dropdown-item" href="/users/sort">Sort Users by Age</a></li>
           <li><a class="dropdown-item" href="/users">Limit and skip paginated results</a></li>
         </ul>
       </li>
 
-
+      <!-- <li class="nav-item">
+          <a class="btn btn-warning w-100 mb-2" href="/users/increment-age-by-1">Update All Users' Age by 1</a>
+        </li> 
+        
         <li class="nav-item">
-          <a class="btn btn-warning w-100 mb-2" href="/index">UpdateMany Age by 1</a>
+          <a class="btn btn-danger w-100 mb-2 ms-2"  href="/user/delete-users-age-over-50">Delete All Users whose Age>50</a>
         </li>
-        <li class="nav-item">
-          <a class="btn btn-danger w-100 mb-2 ms-2"  href="/user/find">DeleteMany a User</a>
-        </li>
+        -->
+      <li class="nav-item">
+        <form method="POST" action="/users/increment-age-by-1?_method=PATCH">
+          <button type="submit" class="btn btn-warning w-100 mb-2">Update All Users's Age by 1</button>       
+        </form>
+      </li>
+      <li class="nav-item">
+        <form method="POST" action="/user/delete-users-age-over-50?_method=DELETE">
+          <button type="submit" class="btn btn-danger w-100 mb-2 ms-2">Delete All Users whose Age>50 and Role="User"</button>       
+        </form>
+      </li>
+        
       </ul>
     </div>
   </div>

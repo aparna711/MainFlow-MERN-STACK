@@ -9,8 +9,7 @@ const connectDB = require('./config/dbConn');
 const User = require("./model/User.js")
 
 const methodOverride = require('method-override');
-const { title } = require('process');
-const { render } = require('ejs');
+
 app.use(methodOverride('_method'));
 
 app.set("view engine","ejs")
@@ -175,9 +174,8 @@ app.delete('/delete/:id', async (req, res) => {
     res.status(500).send("Error deleting user: " + err);
   }
 });
+
 //Pagination route
-
-
 // Route to display users with pagination
 app.get('/users', async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -211,6 +209,35 @@ app.get('/users/sort-by-age', async (req, res) => {
   });
 });
 
+// Projection route
+app.get('/users/name-and-email', async (req, res) => {
+  const users = await User.find({}, 'username email'); // Fetch only username and email
+  console.log("Projection users:", users);
+  res.render('projection.ejs', {users}); // Render the form to fetch only name and email
+});
+
+// Increment age by 1 for all users
+app.patch('/users/increment-age-by-1', async (req, res) => {
+  try {
+    const result = await User.updateMany({}, { $inc: { age: 1 } });
+    //console.log("Users updated:", result);
+    res.redirect('/index'); // Redirect to the index page after updating
+  } catch (err) {
+    console.error("Error incrementing age:", err);
+    res.status(500).send("Error incrementing age: " + err);
+  }
+});
+// Delete all users whose age is greater than 50
+app.delete('/user/delete-users-age-over-50', async (req, res) => {
+  try {
+    const result = await User.deleteMany({ age: { $gt: 50 } , role: "User" });
+    //console.log("Users deleted:", result);
+    res.redirect('/index'); // Redirect to the index page after deleting
+  } catch (err) {
+    console.error("Error deleting users:", err);
+    res.status(500).send("Error deleting users: " + err);
+  }
+});
 // // Show all inserted data
 // app.get('/index', async (req, res) => {
 //     try {
