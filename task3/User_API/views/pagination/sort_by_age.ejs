@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   
+    <!-- <script> // Method 1
+        const sortSelect = () =>{
+            const users = fetch('/users/sort-by-age', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    sort: document.querySelector('select[name="sort"]').value
+                })
+            })
+    </script> -->
+    <script>
+        const sortSelect = () => {
+            const sortValue = document.querySelector('select[name="sort"]').value;
+            fetch(`/users/sort-by-age?sort=${sortValue}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch sorted users');
+                    }
+                    return response.text(); // ⬅️ Get HTML as text
+                })
+                .then(html => {
+                    const userList = document.querySelector('.sortedusers');
+                    userList.innerHTML = html; // ⬅️ Inject HTML into the div
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while fetching sorted users.');
+                });
+        };
+        </script>
+         <%- include('../include/bootstrap_header') %>
+</head>
+<body>
+    
+    <%- include('../include/navbar') %> 
+    
+    <!-- <form method="GET" action="/users/sort-by-age" class="m-5"> 
+        <select name="sort" onchange="this.form.submit()" class="form-select w-auto d-inline">
+            <option value="">-- Sort by Age --</option>
+            <option value="asc">Age: Low to High</option>
+            <option value="desc">Age: High to Low</option>
+        </select>
+    </form> -->
+     
+        <select name="sort" onchange="sortSelect()" class="form-select w-auto d-inline m-4">
+            <option value="">-- Sort by Age --</option>
+            <option value="asc">Age: Low to High</option>
+            <option value="desc">Age: High to Low</option>
+        </select>
+    <div class="sortedusers"></div>
+    <%- include('../include/bootstrap_footer') %>
+</body>
+</html>

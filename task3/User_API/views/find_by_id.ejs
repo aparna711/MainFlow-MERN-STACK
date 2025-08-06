@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fetch By Id</title>
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <%- include('include/bootstrap_header') %>
     <script>
         const fetchData = () => {
             const userId = document.getElementById('userId').value.trim();
@@ -62,7 +62,7 @@
         <button type="button" class="btn btn-primary" onclick="fetchData()">Fetch User</button>
         <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('userId').value=''">Clear</button>
       </div>
-<%- include('include/footer') %>   
+<%- include('include/bootstrap_footer') %>   
       <div id="userDetails" class="mt-4"></div>
     
     </div>

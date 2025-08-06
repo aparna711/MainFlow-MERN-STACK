@@ -9,6 +9,8 @@ const connectDB = require('./config/dbConn');
 const User = require("./model/User.js")
 
 const methodOverride = require('method-override');
+const { title } = require('process');
+const { render } = require('ejs');
 app.use(methodOverride('_method'));
 
 app.set("view engine","ejs")
@@ -46,7 +48,7 @@ Routes : (Todo ny hitesh choudary)
 //Home route to render the registration form
 app.get('/',(req,res)=>{
   console.log("Home route accessed");
-  res.render('index.ejs');
+  res.render('register.ejs');
      
  })
 
@@ -70,7 +72,7 @@ app.post('/index', async (req, res) => {
 //List all users
 app.get('/index', async(req,res)=>{
    const users = await User.find();
-   res.render('index', {users})
+   res.render('index', {users, title: 'All Users'}); // Render the view with all users
 })
 
 // Find by Id route
@@ -95,6 +97,33 @@ app.get('/user/find/:id', async(req,res) =>{
       res.status(500).send("Error fetching user by ID: " + err);
   }
 
+});
+
+//Find User whose age > 25
+app.get('/user/age-above-25', async (req, res) =>{
+  try{
+      const users = await User.find({age: {$gt:25}});
+      if(users.length === 0){
+          return res.status(404).send("No users found above age 25");
+      }
+      res.render('index.ejs', { users, title: 'Users above age 25' }); // Render the view with users above age 25
+    }
+    catch(err){
+    res.status(500).send("Error fetching users' data above age 25:" +err)
+  }
+});
+
+//Find User whose role is Admin
+app.get('/user/role-admin', async (req, res) => {
+  try {
+    const users = await User.find({ role: 'Admin' });
+    if (users.length === 0) {
+      return res.status(404).send("No users found with role Admin");
+    }
+    res.render('index.ejs', { users , title : 'Users whose role is Admin' }); // Render the view with users having role Admin
+  } catch (err) {
+    res.status(500).send("Error fetching users with role Admin: " + err);
+  }
 });
 //Edit and Update routes
 app.get('/edit/:id', async (req, res) => {
@@ -145,6 +174,41 @@ app.delete('/delete/:id', async (req, res) => {
   } catch (err) {
     res.status(500).send("Error deleting user: " + err);
   }
+});
+//Pagination route
+
+
+// Route to display users with pagination
+app.get('/users', async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 5; // Number of users per page
+  const skip = (page - 1) * limit;
+
+  const totalUsers = await User.countDocuments();
+  //console.log(`Total users: ${totalUsers}, Page: ${page}, Limit: ${limit}, Skip: ${skip}`);
+
+  // Fetch users with pagination
+  const users = await User.find().skip(skip).limit(limit);
+
+  const totalPages = Math.ceil(totalUsers / limit);
+
+  res.render('pagination/users.ejs', {
+    users,
+    currentPage: page,
+    totalPages
+  });
+});
+//Sort BY AGE
+app.get('/users/sort', async (req, res) => {
+  res.render('pagination/sort_by_age.ejs'); // Render the form to sort users by age
+});
+
+app.get('/users/sort-by-age', async (req, res) => {
+  const sort = req.query.sort === 'desc' ? -1 : 1;
+  const users = await User.find().sort({ age: sort })
+  res.render('include/table.ejs', {
+    users, title: `Sorted Users by ${req.query.sort} order of Age`,
+  });
 });
 
 // // Show all inserted data
