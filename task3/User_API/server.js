@@ -22,6 +22,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Serve static files (including Bootstrap) from node_modules
 app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 
+//Getting the method to create 50 users in order
+const createUsersInOrder = require('./utils/demo_users_create.js');
+
 //Connect to MongoDB
 connectDB();
 
@@ -248,6 +251,16 @@ app.delete('/user/delete-all-users', async (req, res) => {
   } catch (err) {
     console.error("Error deleting users:", err);
     res.status(500).send("Error deleting users: " + err);
+  }
+});
+
+app.get('/create-demo-users', async (req, res) => {
+  try {
+    const result = await createUsersInOrder(); 
+    res.status(200).redirect('/index'); // Redirect to the index page after creating demo users
+  } catch (err) {
+    console.error("Error creating demo users:", err);
+    res.status(500).send({ error: 'User creation failed'});
   }
 });
 // // Show all inserted data

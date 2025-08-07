@@ -40,9 +40,9 @@
           <a class="btn btn-danger w-100 mb-2 ms-2"  href="/user/delete-users-age-over-50">Delete All Users whose Age>50</a>
         </li>
         -->
-      <li class="nav-item">
+      <li class="nav-item ">
         <form method="POST" action="/users/increment-age-by-1?_method=PATCH">
-          <button type="submit" class="btn btn-warning w-100 mb-2">Update All Users's Age by 1</button>       
+          <button type="submit" class="btn btn-warning w-100 mb-2 mr-2">Update All Users's Age by 1</button>       
         </form>
       </li>
       <li class="nav-item">
@@ -50,12 +50,17 @@
           <button type="submit" class="btn btn-danger w-100 mb-2 ms-2">Delete All Users whose Age>50 and Role="User"</button>       
         </form>
       </li>
+      
       <li class="nav-item">
-        <form method="POST" action="/user/delete-all-users?_method=DELETE">
-          <button type="submit" class="btn btn-danger w-100 mb-2 ms-3">Delete All Users</button>       
+        <form method="GET" action="/create-demo-users">
+          <button type="submit" class="btn btn-success w-100 mb-2 ms-3">Create 50 Demo Users</button>       
         </form>
       </li>
-        
+      <li class="nav-item">
+        <form method="POST" action="/user/delete-all-users?_method=DELETE">
+          <button type="submit" class="btn btn-danger w-100 mb-2 ms-4">Delete All Users</button>       
+        </form>
+      </li>
       </ul>
     </div>
   </div>
