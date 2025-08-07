@@ -63,15 +63,16 @@ app.post('/index', async (req, res) => {
   });
 
   await newUser.save()
-  .then(()=>  res.redirect('/index'))
+  .then(()=>  res.redirect('/index?success=true')) // Redirect to index page after successful save
   .catch(err =>  res.status(500).send("Error saving user : " +err))
   
 
 });
 //List all users
 app.get('/index', async(req,res)=>{
+   const success = req.query.success === 'true'; // Check if the query parameter is present
    const users = await User.find();
-   res.render('index', {users, title: 'All Users'}); // Render the view with all users
+   res.render('index', {users, title: 'All Users', success}); // Render the view with all users
 })
 
 // Find by Id route
@@ -105,7 +106,7 @@ app.get('/user/age-above-25', async (req, res) =>{
       if(users.length === 0){
           return res.status(404).send("No users found above age 25");
       }
-      res.render('index.ejs', { users, title: 'Users above age 25' }); // Render the view with users above age 25
+      res.render('index.ejs', { users, title: 'Users above age 25' , success: false}); // Render the view with users above age 25
     }
     catch(err){
     res.status(500).send("Error fetching users' data above age 25:" +err)
@@ -119,7 +120,7 @@ app.get('/user/role-admin', async (req, res) => {
     if (users.length === 0) {
       return res.status(404).send("No users found with role Admin");
     }
-    res.render('index.ejs', { users , title : 'Users whose role is Admin' }); // Render the view with users having role Admin
+    res.render('index.ejs', { users , title : 'Users whose role is Admin', success: false }); // Render the view with users having role Admin
   } catch (err) {
     res.status(500).send("Error fetching users with role Admin: " + err);
   }
@@ -230,7 +231,18 @@ app.patch('/users/increment-age-by-1', async (req, res) => {
 // Delete all users whose age is greater than 50
 app.delete('/user/delete-users-age-over-50', async (req, res) => {
   try {
-    const result = await User.deleteMany({ age: { $gt: 50 } , role: "User" });
+    const result = await User.deleteMany({ age:{$gt:25}, role:"User" });
+    //console.log("Users deleted:", result);
+    res.redirect('/index'); // Redirect to the index page after deleting
+  } catch (err) {
+    console.error("Error deleting users:", err);
+    res.status(500).send("Error deleting users: " + err);
+  }
+});
+// Delete all users
+app.delete('/user/delete-all-users', async (req, res) => {
+  try {
+    const result = await User.deleteMany({});
     //console.log("Users deleted:", result);
     res.redirect('/index'); // Redirect to the index page after deleting
   } catch (err) {

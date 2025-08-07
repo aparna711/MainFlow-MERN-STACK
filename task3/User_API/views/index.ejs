@@ -9,11 +9,19 @@
 <body>
   
 <%- include('include/navbar') %>
+<% if (success) { %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    ✅ User registered successfully!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% } %>
+  
 <div class="container my-4 p-4 text-center bg-light border rounded shadow">
   <h2 class="text-success fst-italic fw-semibold">
     <%= title %>
   </h2>
 </div>
+
 <%- include('include/table') %>
 <%- include('include/bootstrap_footer')  %>
 </body>
