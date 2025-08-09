@@ -253,7 +253,7 @@ app.delete('/user/delete-all-users', async (req, res) => {
     res.status(500).send("Error deleting users: " + err);
   }
 });
-
+//Create 50 demo users in order
 app.get('/create-demo-users', async (req, res) => {
   try {
     const result = await createUsersInOrder(); 
