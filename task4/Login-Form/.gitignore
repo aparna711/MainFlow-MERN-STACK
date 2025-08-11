@@ -1,0 +1,102 @@
+node_modules
+.env
+
+
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+
+.# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.development
+.env.test
+.env.production 
+
+
+# Build output
+build
+coverage
+lib
+.eslintcache
+.cache
+.next
+out
+.nuxt       
+
+# Miscellaneous
+*.tgz
+*.zip       
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.orig
+*.old
+*.pid
+*.seed
+*.pid.lock
+*.seed.lock     
+
+# Logs
+logs
+*.log           
+
+# Dependency directories
+node_modules
+jspm_packages
+bower_components        
+
+# Compiled source #
+dist
+lib     
+
+# Test coverage
+coverage    
+
+# IDE specific files
+.idea
+.vscode     
+
+
+# Operating system files
+.DS_Store
+Thumbs.db
+ehthumbs.db     
+
+# Ignore specific files
+*.pem
+*.key
+*.crt       
+
+# Ignore specific directories
+tmp
+temp        
